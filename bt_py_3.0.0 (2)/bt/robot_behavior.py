@@ -11,7 +11,7 @@ import bt_library as btl
 # Instantiate the tree according to the assignment. The following are just examples.
 
 # Example 1:
-# tree_root = bt.Timer(5, bt.FindHome())
+tree_root = bt.Timer(5, bt.FindHome())
 
 # Example 2:
 # tree_root = bt.Selection(
@@ -22,12 +22,12 @@ import bt_library as btl
 # )
 
 # Example 3:
-tree_root = bt.Selection(
-    [
-        bt.BatteryLessThan30(),
-        bt.Timer(10, bt.FindHome())
-    ]
-)
+# tree_root = bt.Selection(
+#     [
+#         bt.BatteryLessThan30(),
+#         bt.Timer(10, bt.FindHome())
+#     ]
+# )
 
 # Store the root node in a behavior tree instance
 robot_behavior = btl.BehaviorTree(tree_root)

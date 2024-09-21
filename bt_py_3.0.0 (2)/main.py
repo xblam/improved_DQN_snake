@@ -22,16 +22,10 @@ current_blackboard.set_in_environment(HOME_PATH, "")
 current_blackboard.set_in_environment(CHARGING, False)
 
 done = False
-
-tree = btl.TreeNode()
-composite = btl.Composite(tree)
-select = Selection(composite)
-priority = Priority(composite)
-sequence = Sequence(composite)
 while not done:
     # Each cycle in this while-loop is equivalent to 1 second time
 
-        # Step 1: Change the environment
+    # Step 1: Change the environment
     #   - Change the battery level (charging or depleting)
     #   - Simulate the response of the dusty spot sensor
     #   - Simulate user input commands
@@ -45,8 +39,11 @@ while not done:
     user_input = input("change value of dustry sensor, 1 for dirty 0 for clean: ")
     current_blackboard.set_in_environment(DUSTY_SPOT_SENSOR, user_input)
 
+    random_number = random.choice([0, 1])
+    current_blackboard.set_in_environment(DUSTY_SPOT_SENSOR, random_number)
 
     # Step 2: Evaluating the behavior tree
+
 
     # Print the state of the tree nodes before the evaluation
     print('BEFORE -------------------------------------------------------------------------')
