@@ -3,6 +3,7 @@ import pygame
 import random
 from collections import namedtuple
 import numpy as np
+import matplotlib.pyplot as plt
 
 pygame.init()
 font = pygame.font.SysFont('arial', 25)
@@ -27,12 +28,32 @@ BLUE = (0, 0, 200)
 GREEN = (0, 200, 0)
 BLACK = (0,0,0)
 
-BOARD_DIM = 6
+BOARD_DIM = 10
 BLOCK_SIZE = int(480/BOARD_DIM)
-SPEED = 1000
+SPEED = 10000
 WIDTH = 480
 HEIGHT = 480
 
 # reward/penalties
 FOOD_REWARD = 10
-DEATH_PENALTY = -10
+DEATH_PENALTY = -100
+STEP_PENALTY = -2
+
+# plotting helper
+
+
+def plot_scores(scores, window=50):
+    plt.figure(figsize=(10, 6))
+    plt.plot(scores, label="Score per Episode")
+
+    if len(scores) >= window:
+        moving_avg = np.convolve(scores, np.ones(window)/window, mode='valid')
+        plt.plot(range(window - 1, len(scores)), moving_avg, label=f"{window}-Game Moving Avg")
+
+    plt.title("Training Progress")
+    plt.xlabel("Episode")
+    plt.ylabel("Score")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()

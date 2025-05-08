@@ -1,33 +1,34 @@
 import pygame
+import numpy as np
 from game import SnakeGame
-from qlearning_agent import QLearningAgent
+from dqn_agent import DQNAgent
 from helper import plot_scores
 
-def train_qlearning(n_games=1000, print_log = True):
+def train_dqn(n_games=1000, print_log=2):
+    print("DQN")
     game = SnakeGame()
-    agent = QLearningAgent()
-    # agent = game.agent
+    agent = DQNAgent()
     scores = []
     recent_scores = []
 
     for episode in range(n_games):
         game.reset()
+        state = agent.get_state(game)
         total_reward = 0
         done = False
-        state = agent.get_state(game)
 
         while not done:
             action = agent.select_action(state)
             reward, done, score = game.play_step(action)
-            new_state = agent.get_state(game)
-            agent.store_transition(new_state, reward, done)
-            state = new_state
+            next_state = agent.get_state(game)
+            agent.store_transition(state, action, reward, next_state, done)
+            agent.train_step()
+            state = next_state
             total_reward += reward
 
-        agent.reset_episode()
         scores.append(score)
         recent_scores.append(score)
-        
+
         if print_log == 2:
             print(f"Game {episode+1}, Score: {score}, Total Reward: {total_reward}")
             
@@ -36,10 +37,9 @@ def train_qlearning(n_games=1000, print_log = True):
                 print("Last 10 Scores:", recent_scores)
                 recent_scores = []
 
-    plot_scores(scores, window = 50)
-
+    plot_scores(scores, window=50)
     print("Done Training")
     pygame.quit()
 
 if __name__ == '__main__':
-    train_qlearning(n_games = 2500, print_log = True)
+    train_dqn(n_games=2500, print_log=2)
