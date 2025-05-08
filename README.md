@@ -29,4 +29,4 @@ The Snake game build itself will be relatively simple, with the following functi
 
 For each step, the user/model can input one of 3 actions, represented as a one-hot vector: [1, 0, 0] to go straight, [0, 1, 0] to turn right, and [0, 0, 1] to turn left`, with the direction change being relative to the snake's current heading. 
 
-For this experiment, the target policy will just be for the snake to keep going in the same direction if there is food in that direction, or to turn to one of the directions with the food. Since the food can be in more than one direction (for example, if the food was diagonal from the snake), the target policy will first tell the snake to keep going in the same direction, and then to turn only when necessary.
+the directions will be realtive to where the snake is headed now

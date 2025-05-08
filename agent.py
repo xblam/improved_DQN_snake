@@ -1,5 +1,6 @@
+from helper import *
 class Agent:
-    def __init__(self, name):
+    def __init__(self, name, clockwise):
         self.name = name
         self.memory = []
         self.thoughts = []
@@ -13,6 +14,24 @@ class Agent:
         self.tool_use_tools = []
         self.tool_use_tool_results = []
 
+class RandomAgent:
+    def __init__(self):
+        self.trajectory = []
+
+    def select_action(self):
+        # Randomly choose between straight, right, or left
+        return random.choice([
+            [1, 0, 0],  # go straight
+            [0, 1, 0],  # turn right
+            [0, 0, 1],  # turn left
+        ])
+
+    def store_transition(self, state, action, reward):
+        self.trajectory.append((state, action, reward))
+
+    def reset_episode(self):
+        self.trajectory.clear()
+
 def greedy_toward_food(game):
     direction = game.direction
     head = game.head
@@ -21,7 +40,6 @@ def greedy_toward_food(game):
     dx = food.x - head.x
     dy = food.y - head.y
 
-    clockwise = [Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP]
     idx = clockwise.index(direction)
 
     # Check straight, right, left

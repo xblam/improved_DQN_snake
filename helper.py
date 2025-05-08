@@ -14,15 +14,8 @@ class Direction(Enum):
     UP = 3
     DOWN = 4
 
-def direction_one_hot(direction):
-    if direction == Direction.RIGHT:
-        return [1, 0, 0, 0]
-    elif direction == Direction.LEFT:
-        return [0, 1, 0, 0]
-    elif direction == Direction.UP:
-        return [0, 0, 1, 0]
-    elif direction == Direction.DOWN:
-        return [0, 0, 0, 1]
+clockwise = [Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP]
+
 
 # this will just represent where the snake is right now
 Point = namedtuple('Point', 'x, y')

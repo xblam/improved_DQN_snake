@@ -1,4 +1,5 @@
 from helper import *
+from agent import RandomAgent
 
 class SnakeGame:
     def __init__(self, w=WIDTH, h=HEIGHT):
@@ -99,17 +100,17 @@ class SnakeGame:
     def _move(self, action):
         # [straight, right, left]
 
-        clock_wise = [Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP]
-        idx = clock_wise.index(self.direction)
+        idx = clockwise.index(self.direction)
 
+        # no change, turn right, and turn left respectively
         if np.array_equal(action, [1, 0, 0]):
-            new_dir = clock_wise[idx] # no change
+            new_dir = clockwise[idx]
         elif np.array_equal(action, [0, 1, 0]):
             next_idx = (idx + 1) % 4
-            new_dir = clock_wise[next_idx] # right turn r -> d -> l -> u
+            new_dir = clockwise[next_idx]
         else: # [0, 0, 1]
             next_idx = (idx - 1) % 4
-            new_dir = clock_wise[next_idx] # left turn r -> u -> l -> d
+            new_dir = clockwise[next_idx]
 
         self.direction = new_dir
 
@@ -159,8 +160,6 @@ class SnakeGame:
 
         return [danger_straight, danger_right, danger_left]
    
-    
-    # get the game state
     def get_game_state(self):
         rows = self.h // BLOCK_SIZE
         cols = self.w // BLOCK_SIZE
@@ -172,79 +171,54 @@ class SnakeGame:
         fx, fy = int(self.food.x // BLOCK_SIZE), int(self.food.y // BLOCK_SIZE)
         food_matrix[fy][fx] = 1
 
-        # Snake body = 1
         for segment in self.snake[1:]:
             x, y = int(segment.x // BLOCK_SIZE), int(segment.y // BLOCK_SIZE)
             snake_matrix[y][x] = 1
 
-        # Snake head = 2
         hx, hy = int(self.head.x // BLOCK_SIZE), int(self.head.y // BLOCK_SIZE)
         snake_head_matrix[hy][hx] = 1
 
-        # combine all the matrices
+        # Combine matrices and relative indicators
         state = np.concatenate((
             snake_matrix.flatten(),
             snake_head_matrix.flatten(),
             food_matrix.flatten(),
-            direction_one_hot(self.direction),
-            self.get_danger_flags()
+            self.get_danger_flags(),           # [danger_straight, right, left]
+            self.get_relative_food_direction() # [food_ahead, right, left]
         ))
+
         print(state.shape)
         print(state)
         return state
 
-class RandomAgent:
-    def __init__(self):
-        self.trajectory = []  # stores (state, action, reward)
-        self.score = 0
-
-    def select_action(self):
-        return random.choice([
-            [1, 0, 0],  # straight
-            [0, 1, 0],  # right
-            [0, 0, 1],  # left
-        ])
-
-    def store_transition(self, state, action, reward):
-        self.trajectory.append((state, action, reward))
-
-    def reset_episode(self):
-        self.trajectory = []
-        self.score = 0
-
-
 if __name__ == '__main__':
     game = SnakeGame()
+    # agent = RandomAgent()
+    
     game.reset()
+    # reward, game_over, score = game.play_step([1, 0, 0])
+    # agent.reset_episode()
 
     running = True
     while running:
-        action = [1, 0, 0]  # default = go straight
+    #     action = agent.select_action()
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+    #     # Play one step
+        reward, game_over, score = game.play_step([0, 1, 0])
 
-            elif event.type == pygame.KEYDOWN:
-                # Determine action based on relative movement
-                if event.key == pygame.K_LEFT:
-                    action = [0, 0, 1]  # turn left
-                elif event.key == pygame.K_RIGHT:
-                    action = [0, 1, 0]  # turn right
-                else:
-                    action = [1, 0, 0]  # go straight (e.g., any other key)
+    #     # Get current state (already relative, includes danger and food info)
+    #     state = game.get_game_state()
+    #     agent.store_transition(state, action, reward)
 
-                # Take one step in the game
-                reward, game_over, score = game.play_step(action)
-                print("Score:", score)
-                game.get_game_state()  # for debugging or feeding into model
+    #     print(f"Score: {score}")
 
-                if game_over:
-                    print("Game Over!")
-                    running = False
+    #     # End game if over
+    #     if game_over:
+    #         print("Game Over!")
+    #         running = False
 
+    #     # Update display
         game._update_ui()
-        game.get_game_state()  # for debugging or feeding into model
         game.clock.tick(10)
 
     pygame.quit()
