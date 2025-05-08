@@ -1,10 +1,12 @@
 from helper import *
 from agent import RandomAgent
+from qlearning_agent import QLearningAgent
 
 class SnakeGame:
     def __init__(self, w=WIDTH, h=HEIGHT):
         self.w = w
         self.h = h
+
         # init display
         self.display = pygame.display.set_mode((self.w, self.h))
         pygame.display.set_caption('Snake')
@@ -71,8 +73,9 @@ class SnakeGame:
         return reward, game_over, self.score
 
     # check for collisions
-    def is_collision(self):
-        pt = self.head
+    def is_collision(self, pt = None):
+        if not pt:
+            pt = self.head
         # hits boundary
         if pt.x > self.w - BLOCK_SIZE or pt.x < 0 or pt.y > self.h - BLOCK_SIZE or pt.y < 0:
             return True
@@ -194,34 +197,35 @@ class SnakeGame:
         print(state)
         return state
 
-if __name__ == '__main__':
-    game = SnakeGame()
-    agent = RandomAgent() 
+# if __name__ == '__main__':
+#     game = SnakeGame()
+#     # agent = RandomAgent() 
+#     agent = QLearningAgent()
     
-    game.reset()
+#     game.reset()
 
-    running = True
-    while running:
-        action = agent.select_action()
+#     running = True
+#     while running:
+#         action = agent.select_action()
 
-    #     # Play one step
-        reward, game_over, score = game.play_step(action)
+#     #     # Play one step
+#         reward, game_over, score = game.play_step(action)
 
-    #     # Get current state (already relative, includes danger and food info)
-    #     state = game.get_game_state()
-    #     agent.store_transition(state, action, reward)
+#     #     # Get current state (already relative, includes danger and food info)
+#     #     state = game.get_game_state()
+#     #     agent.store_transition(state, action, reward)
 
-    #     print(f"Score: {score}")
+#     #     print(f"Score: {score}")
 
-    #     # End game if over
-        if game_over:
-            print("Game Over!")
-            game.reset()
+#     #     # End game if over
+#         if game_over:
+#             print("Game Over!")
+#             game.reset()
 
-    #     # Update display
-        game._update_ui()
-        game.clock.tick(100)
+#     #     # Update display
+#         game._update_ui()
+#         game.clock.tick(100)
 
-    pygame.quit()
+#     pygame.quit()
 
 
