@@ -71,8 +71,9 @@ class SnakeGame:
         return reward, game_over, self.score
 
     # check for collisions
-    def is_collision(self):
-        pt = self.head
+    def is_collision(self, pt=None):
+        if pt is None:
+            pt = self.head
         # hits boundary
         if pt.x > self.w - BLOCK_SIZE or pt.x < 0 or pt.y > self.h - BLOCK_SIZE or pt.y < 0:
             return True
@@ -195,34 +196,41 @@ class SnakeGame:
         print(state)
         return state
 
+
 if __name__ == '__main__':
     game = SnakeGame()
-    agent = RandomAgent() 
-    
     game.reset()
 
     running = True
+    action = [1, 0, 0]  # default: go straight
+
     while running:
-        action = agent.select_action()
+        print(game.get_danger_flags())
+        event_happened = False
 
-    #     # Play one step
-        reward, game_over, score = game.play_step(action)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-    #     # Get current state (already relative, includes danger and food info)
-    #     state = game.get_game_state()
-    #     agent.store_transition(state, action, reward)
+            elif event.type == pygame.KEYDOWN:
+                event_happened = True
+                if event.key == pygame.K_LEFT:
+                    action = [0, 0, 1]  # turn left
+                elif event.key == pygame.K_RIGHT:
+                    action = [0, 1, 0]  # turn right
+                elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                    action = [1, 0, 0]  # go straight
 
-    #     print(f"Score: {score}")
+        if event_happened:
+            reward, game_over, score = game.play_step(action)
+            print("Score:", score)
 
-    #     # End game if over
-        if game_over:
-            print("Game Over!")
-            game.reset()
+            if game_over:
+                print("Game Over! Final score:", score)
+                pygame.time.delay(1000)
+                game.reset()
+                action = [1, 0, 0]
 
-    #     # Update display
+
         game._update_ui()
-        game.clock.tick(100)
-
-    pygame.quit()
-
-
+        game.clock.tick(30)  # Higher value = more responsive UI, not snake speed
