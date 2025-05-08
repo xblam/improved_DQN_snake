@@ -23,6 +23,8 @@ class SnakeGame:
         self.food = None
         self._place_food()
         self.frame_iteration = 0
+        self.display.fill(BLACK)
+
 
     # put down food
     def _place_food(self):
@@ -40,6 +42,7 @@ class SnakeGame:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+                
         
         # 2. move
         self._move(action) # update the head
@@ -193,18 +196,16 @@ class SnakeGame:
 
 if __name__ == '__main__':
     game = SnakeGame()
-    # agent = RandomAgent()
+    agent = RandomAgent() 
     
     game.reset()
-    # reward, game_over, score = game.play_step([1, 0, 0])
-    # agent.reset_episode()
 
     running = True
     while running:
-    #     action = agent.select_action()
+        action = agent.select_action()
 
     #     # Play one step
-        reward, game_over, score = game.play_step([0, 1, 0])
+        reward, game_over, score = game.play_step(action)
 
     #     # Get current state (already relative, includes danger and food info)
     #     state = game.get_game_state()

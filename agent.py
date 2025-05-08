@@ -1,18 +1,4 @@
 from helper import *
-class Agent:
-    def __init__(self, name, clockwise):
-        self.name = name
-        self.memory = []
-        self.thoughts = []
-        self.actions = []
-        self.tools = []
-        self.tool_results = []
-        self.tool_uses = []
-        self.tool_use_results = []
-        self.tool_use_thoughts = []
-        self.tool_use_actions = []
-        self.tool_use_tools = []
-        self.tool_use_tool_results = []
 
 class RandomAgent:
     def __init__(self):
