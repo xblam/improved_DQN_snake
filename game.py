@@ -7,6 +7,8 @@ class SnakeGame:
         self.w = w
         self.h = h
 
+        
+
         # init display
         self.display = pygame.display.set_mode((self.w, self.h))
         pygame.display.set_caption('Snake')
@@ -55,13 +57,13 @@ class SnakeGame:
         game_over = False
         if self.is_collision() or self.frame_iteration > 100*len(self.snake):
             game_over = True
-            reward = -10
+            reward = DEATH_PENALTY
             return reward, game_over, self.score
 
         # 4. place new food or just move
         if self.head == self.food:
             self.score += 1
-            reward = 10
+            reward = FOOD_REWARD
             self._place_food()
         else:
             self.snake.pop()
@@ -196,36 +198,3 @@ class SnakeGame:
         print(state.shape)
         print(state)
         return state
-
-# if __name__ == '__main__':
-#     game = SnakeGame()
-#     # agent = RandomAgent() 
-#     agent = QLearningAgent()
-    
-#     game.reset()
-
-#     running = True
-#     while running:
-#         action = agent.select_action()
-
-#     #     # Play one step
-#         reward, game_over, score = game.play_step(action)
-
-#     #     # Get current state (already relative, includes danger and food info)
-#     #     state = game.get_game_state()
-#     #     agent.store_transition(state, action, reward)
-
-#     #     print(f"Score: {score}")
-
-#     #     # End game if over
-#         if game_over:
-#             print("Game Over!")
-#             game.reset()
-
-#     #     # Update display
-#         game._update_ui()
-#         game.clock.tick(100)
-
-#     pygame.quit()
-
-

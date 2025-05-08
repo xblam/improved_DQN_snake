@@ -25,8 +25,11 @@ def train_qlearning(n_games=1000):
         agent.reset_episode()
         scores.append(score)
         print(f"Game {episode+1}, Score: {score}, Total Reward: {total_reward}")
+        if episode % 10 == 0:
+            print("----- Scores:", scores)
+
 
     pygame.quit()
 
 if __name__ == '__main__':
-    train_qlearning(n_games=500)
+    train_qlearning(1000)

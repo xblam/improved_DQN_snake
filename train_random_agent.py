@@ -30,6 +30,6 @@ if __name__ == '__main__':
 
     #     # Update display
         game._update_ui()
-        game.clock.tick(100)
+        game.clock.tick(1000)
 
     pygame.quit()
