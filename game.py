@@ -131,6 +131,32 @@ class SnakeGame:
         self.head = Point(x, y)
 
 
+    def closest_obstacle(self, direction):
+        x, y = int(self.head.x), int(self.head.y)
+        distance = 0
+
+        while True:
+            if direction == Direction.RIGHT:
+                x += BLOCK_SIZE
+            elif direction == Direction.LEFT:
+                x -= BLOCK_SIZE
+            elif direction == Direction.UP:
+                y -= BLOCK_SIZE
+            elif direction == Direction.DOWN:
+                y += BLOCK_SIZE
+
+            distance += 1
+
+            # check for wall
+            if x < 0 or x >= self.w or y < 0 or y >= self.h:
+                break
+
+            # check for snake body
+            if Point(x, y) in self.snake[1:]:
+                break
+
+        return distance  # number of steps before obstacle
+
 
     # to see if any of the possible directions result in instant death
     def get_danger_flags(self):
@@ -146,22 +172,10 @@ class SnakeGame:
         dir_right = clockwise[(idx + 1) % 4]
         dir_left = clockwise[(idx - 1) % 4]
 
-        def next_point(direction):
-            x, y = head.x, head.y
-            if direction == Direction.RIGHT:
-                x += BLOCK_SIZE
-            elif direction == Direction.LEFT:
-                x -= BLOCK_SIZE
-            elif direction == Direction.UP:
-                y -= BLOCK_SIZE
-            elif direction == Direction.DOWN:
-                y += BLOCK_SIZE
-            return Point(x, y)
-
         # Use self.is_collision to check danger
-        danger_straight = 1 if self.is_collision(next_point(dir_straight)) else 0
-        danger_right   = 1 if self.is_collision(next_point(dir_right)) else 0
-        danger_left    = 1 if self.is_collision(next_point(dir_left)) else 0
+        danger_straight = self.closest_obstacle(dir_straight)
+        danger_right   = self.closest_obstacle(dir_right)
+        danger_left    = self.closest_obstacle(dir_left)
 
         return [danger_straight, danger_right, danger_left]
    
@@ -197,6 +211,7 @@ class SnakeGame:
         return state
 
 
+# RUN THE SNAKE MANUALLY -----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
     game = SnakeGame()
     game.reset()
@@ -234,3 +249,36 @@ if __name__ == '__main__':
 
         game._update_ui()
         game.clock.tick(30)  # Higher value = more responsive UI, not snake speed
+
+
+# LET THE RANDOM AGENT PLAY THE GAME -----------------------------------------------------------------------------------------------------------------
+# if __name__ == '__main__':
+#     game = SnakeGame()
+#     agent = RandomAgent() 
+    
+#     game.reset()
+
+#     running = True
+#     while running:
+#         print(game.get_danger_flags())
+#         action = agent.select_action()
+
+#     #     # Play one step
+#         reward, game_over, score = game.play_step(action)
+
+#     #     # Get current state (already relative, includes danger and food info)
+#     #     state = game.get_game_state()
+#     #     agent.store_transition(state, action, reward)
+
+#     #     print(f"Score: {score}")
+
+#     #     # End game if over
+#         if game_over:
+#             print("Game Over!")
+#             game.reset()
+
+#     #     # Update display
+#         game._update_ui()
+#         game.clock.tick(100)
+
+#     pygame.quit()
