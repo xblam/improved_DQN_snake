@@ -97,6 +97,7 @@ class SnakeGame:
         self.display.blit(text, [0, 0])
         pygame.display.flip()
 
+
     # move the snake
     def _move(self, action):
         # [straight, right, left]
