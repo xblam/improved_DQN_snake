@@ -23,7 +23,7 @@ class SnakeGame:
         self.food = None
         self._place_food()
         self.frame_iteration = 0
-        self.display.fill(BLACK)
+
 
 
     # put down food
@@ -71,10 +71,8 @@ class SnakeGame:
         return reward, game_over, self.score
 
     # check for collisions
-    def is_collision(self, pt=None):
-        # just update the position of head
-        if pt is None:
-            pt = self.head
+    def is_collision(self):
+        pt = self.head
         # hits boundary
         if pt.x > self.w - BLOCK_SIZE or pt.x < 0 or pt.y > self.h - BLOCK_SIZE or pt.y < 0:
             return True
@@ -129,6 +127,8 @@ class SnakeGame:
             y -= BLOCK_SIZE
 
         self.head = Point(x, y)
+
+
 
     # to see if any of the possible directions result in instant death
     def get_danger_flags(self):
@@ -214,13 +214,13 @@ if __name__ == '__main__':
     #     print(f"Score: {score}")
 
     #     # End game if over
-    #     if game_over:
-    #         print("Game Over!")
-    #         running = False
+        if game_over:
+            print("Game Over!")
+            game.reset()
 
     #     # Update display
         game._update_ui()
-        game.clock.tick(10)
+        game.clock.tick(100)
 
     pygame.quit()
 
