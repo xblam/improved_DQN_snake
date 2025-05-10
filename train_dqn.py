@@ -42,4 +42,4 @@ def train_dqn(n_games=1000, print_log=2):
     pygame.quit()
 
 if __name__ == '__main__':
-    train_dqn(n_games=2500, print_log=2)
+    train_dqn(n_games=500, print_log=2)

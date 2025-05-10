@@ -7,8 +7,6 @@ class SnakeGame:
         self.w = w
         self.h = h
 
-        
-
         # init display
         self.display = pygame.display.set_mode((self.w, self.h))
         pygame.display.set_caption('Snake')

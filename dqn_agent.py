@@ -7,7 +7,7 @@ from collections import deque
 from helper import *
 from game import Direction, Point
 
-MAX_MEMORY = 100_000
+# MAX_MEMORY = 100_000
 BATCH_SIZE = 1000
 LR = 0.001
 
@@ -36,11 +36,11 @@ class DQNAgent:
         self.optimizer = optim.Adam(self.model.parameters(), lr=LR)
         self.criterion = nn.MSELoss()
 
-        self.memory = deque(maxlen=MAX_MEMORY)
+        self.memory = deque()
         self.gamma = 0.9
         self.epsilon = 1.0
-        self.epsilon_decay = 0.995
-        self.epsilon_min = 0.01
+        self.epsilon_decay = 0.999
+        self.epsilon_min = 0.001
         self.steps = 0
         self.update_target_every = 100
 
