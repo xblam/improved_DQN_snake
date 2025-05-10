@@ -59,7 +59,7 @@ class QLearningAgent:
         self.last_action = action_idx
         return action
 
-    def store_transition(self, new_state, reward, done):
+    def store_state_transition(self, new_state, reward, done):
         old_q = self.q_table[self.last_state][self.last_action]
         next_max = 0 if done else np.max(self.q_table[new_state])
         new_q = old_q + self.alpha * (reward + self.gamma * next_max - old_q)
