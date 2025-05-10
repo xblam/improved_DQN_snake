@@ -36,7 +36,7 @@ def train_qlearning(n_games=1000, print_log = True):
                 print("Last 10 Scores:", recent_scores)
                 recent_scores = []
 
-    plot_scores(scores, window = 50)
+    plot_scores(scores, window = 50, model = "Q-Learning")
 
     print("Done Training")
     pygame.quit()

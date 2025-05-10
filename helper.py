@@ -35,24 +35,24 @@ WIDTH = 480
 HEIGHT = 480
 
 # reward/penalties
-FOOD_REWARD = 10
+FOOD_REWARD = 25
 DEATH_PENALTY = -150
 STEP_PENALTY = -1
 
 # plotting helper
 
 
-def plot_scores(scores, window=50):
+def plot_scores(scores, window=50, model = "DQN"):
     plt.figure(figsize=(10, 6))
-    plt.plot(scores, label="Score per Episode")
+    plt.plot(scores, label="scores per game")
 
     if len(scores) >= window:
         moving_avg = np.convolve(scores, np.ones(window)/window, mode='valid')
-        plt.plot(range(window - 1, len(scores)), moving_avg, label=f"{window}-Game Moving Avg")
+        plt.plot(range(window - 1, len(scores)), moving_avg, label=f"{window}-game average")
 
-    plt.title("Training Progress")
-    plt.xlabel("Episode")
-    plt.ylabel("Score")
+    plt.title(model + " Snake results")
+    plt.xlabel("game")
+    plt.ylabel("score")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
