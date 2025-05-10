@@ -42,4 +42,4 @@ def train_qlearning(n_games=1000, print_log = True):
     pygame.quit()
 
 if __name__ == '__main__':
-    train_qlearning(n_games = 2500, print_log = True)
+    train_qlearning(n_games = 1000, print_log = 2)

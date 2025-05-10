@@ -6,7 +6,7 @@ from helper import plot_scores
 
 def train_dqn(n_games=1000, print_log=2):
     print("DQN")
-    game = SnakeGame(obstacles=False)
+    game = SnakeGame()
     agent = DQNAgent()
     scores = []
     recent_scores = []
