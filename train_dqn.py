@@ -21,7 +21,7 @@ def train_dqn(n_games=1000, print_log=2):
             action = agent.select_action(state)
             reward, done, score = game.play_step(action)
             next_state = agent.get_state(game)
-            agent.store_transition(state, action, reward, next_state, done)
+            agent.store_state_transition(state, action, reward, next_state, done)
             agent.train_step()
             state = next_state
             total_reward += reward

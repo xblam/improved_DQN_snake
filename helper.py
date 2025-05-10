@@ -17,7 +17,6 @@ class Direction(Enum):
 
 clockwise = [Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP]
 
-
 # this will just represent where the snake is right now
 Point = namedtuple('Point', 'x, y')
 
@@ -40,7 +39,6 @@ DEATH_PENALTY = -150
 STEP_PENALTY = -1
 
 # plotting helper
-
 
 def plot_scores(scores, window=50, model = "DQN"):
     plt.figure(figsize=(10, 6))

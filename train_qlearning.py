@@ -20,7 +20,7 @@ def train_qlearning(n_games=1000, print_log = True):
             action = agent.select_action(state)
             reward, done, score = game.play_step(action)
             new_state = agent.get_state(game)
-            agent.store_transition(new_state, reward, done)
+            agent.store_state_transition(new_state, reward, done)
             state = new_state
             total_reward += reward
 

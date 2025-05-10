@@ -7,7 +7,6 @@ from collections import deque
 from helper import *
 from game import Direction, Point
 
-# MAX_MEMORY = 100_000
 BATCH_SIZE = 1000
 LR = 0.001
 
@@ -25,13 +24,14 @@ class LinearQNet(nn.Module):
         return x
 
 class DQNAgent:
-    def __init__(self, state_size=11, hidden_size=256, action_size=3):
+    def __init__(self, state_size=11, hidden_size=256, action_size=3):\
+        # the size of the neural net will be based on the side of our inputs
         self.state_size = state_size
         self.action_size = action_size
         self.model = LinearQNet(state_size, hidden_size, action_size)
         self.target_model = LinearQNet(state_size, hidden_size, action_size)
         self.target_model.load_state_dict(self.model.state_dict())
-        self.target_model.eval()
+
 
         self.optimizer = optim.Adam(self.model.parameters(), lr=LR)
         self.criterion = nn.MSELoss()
@@ -90,7 +90,7 @@ class DQNAgent:
             move = torch.argmax(prediction).item()
         return [[1,0,0], [0,1,0], [0,0,1]][move]
 
-    def store_transition(self, state, action, reward, next_state, done):
+    def store_state_transition(self, state, action, reward, next_state, done):
         action_index = [[1, 0, 0], [0, 1, 0], [0, 0, 1]].index(action)
         self.memory.append((state, action_index, reward, next_state, done))
 

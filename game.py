@@ -40,6 +40,7 @@ class SnakeGame:
         if self.food in self.snake:
             self._place_food()
 
+    # optional, put down 5 random obstacles
     def _place_obstacles(self):
         self.obstacles = []
         num_obstacles = 5
@@ -53,7 +54,7 @@ class SnakeGame:
 
             if (temp_obstacle in self.snake) or temp_obstacle == self.food or temp_obstacle in self.obstacles:
                 attempts += 1
-                continue  # Skip and try again
+                continue  # Skip and try to place obstacle again
             else:
                 self.obstacles.append(temp_obstacle)
 
@@ -67,12 +68,9 @@ class SnakeGame:
                 pygame.quit()
                 quit()
                 
-        
-        # 2. move
         self._move(action) # update the head
         self.snake.insert(0, self.head)
         
-        # 3. check if game over
         reward = STEP_PENALTY
         game_over = False
         if self.is_collision() or self.frame_iteration > 100*len(self.snake):
@@ -106,6 +104,7 @@ class SnakeGame:
         # hits itself
         if pt in self.snake[1:]:
             return True
+        # hits obstacle
         if pt in self.obstacles:
             return True
 
@@ -159,7 +158,6 @@ class SnakeGame:
             y -= BLOCK_SIZE
 
         self.head = Point(x, y)
-
 
 
     # to see if any of the possible directions result in instant death
@@ -258,7 +256,6 @@ def main():
             if game_over:
                 print(f"Game Over! Final Score: {score}")
                 game.reset()
-
     pygame.quit()
 
 if __name__ == "__main__":

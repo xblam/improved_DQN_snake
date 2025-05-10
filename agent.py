@@ -5,7 +5,7 @@ class RandomAgent:
         self.trajectory = []
 
     def select_action(self):
-        # Randomly choose between straight, right, or left
+        # directions will be based on the way that the agent is facing
         return random.choice([
             [1, 0, 0],  # go straight
             [0, 1, 0],  # turn right
@@ -28,7 +28,7 @@ def greedy_toward_food(game):
 
     idx = clockwise.index(direction)
 
-    # Check straight, right, left
+    #  check the directions
     action_straight = [1, 0, 0]
     action_right = [0, 1, 0]
     action_left = [0, 0, 1]
@@ -39,7 +39,7 @@ def greedy_toward_food(game):
             return action_left if direction == Direction.RIGHT else action_right
         elif dy > 0:
             return action_right if direction == Direction.RIGHT else action_left
-    else:  # UP or DOWN
+    else:
         if dx < 0:
             return action_right if direction == Direction.UP else action_left
         elif dx > 0:
