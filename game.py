@@ -3,7 +3,7 @@ from agent import RandomAgent
 from qlearning_agent import QLearningAgent
 
 class SnakeGame:
-    def __init__(self, w=WIDTH, h=HEIGHT):
+    def __init__(self, w=WIDTH, h=HEIGHT, has_walls=False):
         self.w = w
         self.h = h
 
@@ -11,6 +11,7 @@ class SnakeGame:
         self.display = pygame.display.set_mode((self.w, self.h))
         pygame.display.set_caption('Snake')
         self.clock = pygame.time.Clock()
+        self.has_walls = has_walls
         self.reset()
 
     # reset the game
@@ -24,7 +25,8 @@ class SnakeGame:
         self.score = 0
         self.food = None
         self._place_food()
-        self._place_obstacles()
+        if self.has_walls:
+            self._place_obstacles()
         self.frame_iteration = 0
 
 
@@ -82,7 +84,8 @@ class SnakeGame:
             self.score += 1
             reward = FOOD_REWARD
             self._place_food()
-            self._place_obstacles()
+            if self.has_walls:
+                self._place_obstacles()
         else:
             self.snake.pop()
         
