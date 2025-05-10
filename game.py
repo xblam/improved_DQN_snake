@@ -24,6 +24,7 @@ class SnakeGame:
         self.score = 0
         self.food = None
         self._place_food()
+        self._place_obstacles()
         self.frame_iteration = 0
 
 
@@ -35,6 +36,24 @@ class SnakeGame:
         self.food = Point(x, y)
         if self.food in self.snake:
             self._place_food()
+
+    def _place_obstacles(self):
+        self.obstacles = []
+        num_obstacles = 5
+        attempts = 0
+        max_attempts = 100
+
+        while len(self.obstacles) < num_obstacles and attempts < max_attempts:
+            x = random.randint(0, (self.w - BLOCK_SIZE) // BLOCK_SIZE) * BLOCK_SIZE
+            y = random.randint(0, (self.h - BLOCK_SIZE) // BLOCK_SIZE) * BLOCK_SIZE
+            temp_obstacle = Point(x, y)
+
+            if (temp_obstacle in self.snake) or temp_obstacle == self.food or temp_obstacle in self.obstacles:
+                attempts += 1
+                continue  # Skip and try again
+            else:
+                self.obstacles.append(temp_obstacle)
+
 
     # move the snake
     def play_step(self, action):
@@ -63,6 +82,7 @@ class SnakeGame:
             self.score += 1
             reward = FOOD_REWARD
             self._place_food()
+            self._place_obstacles()
         else:
             self.snake.pop()
         
@@ -82,6 +102,8 @@ class SnakeGame:
         # hits itself
         if pt in self.snake[1:]:
             return True
+        if pt in self.obstacles:
+            return True
 
         return False
 
@@ -95,6 +117,9 @@ class SnakeGame:
         pygame.draw.rect(self.display, GREEN, pygame.Rect(self.head.x, self.head.y, BLOCK_SIZE, BLOCK_SIZE))
 
         pygame.draw.rect(self.display, RED, pygame.Rect(self.food.x, self.food.y, BLOCK_SIZE, BLOCK_SIZE))
+
+        for obstacle in self.obstacles:
+            pygame.draw.rect(self.display, WHITE, pygame.Rect(obstacle.x, obstacle.y, BLOCK_SIZE, BLOCK_SIZE))
 
         text = font.render("Score: " + str(self.score), True, WHITE)
         self.display.blit(text, [0, 0])
@@ -196,3 +221,41 @@ class SnakeGame:
         print(state.shape)
         print(state)
         return state
+
+def main():
+    print("Manual play with arrow keys. Use ↑ ↓ ← → to control the snake.")
+    game = SnakeGame()
+    game.reset()
+
+    running = True
+    while running:
+        key_pressed = False
+        action = [1, 0, 0]  # default to straight if nothing pressed (won't be used here)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                break
+
+            elif event.type == pygame.KEYDOWN:
+                key_pressed = True
+                if event.key == pygame.K_UP:
+                    game.direction = Direction.UP
+                elif event.key == pygame.K_DOWN:
+                    game.direction = Direction.DOWN
+                elif event.key == pygame.K_LEFT:
+                    game.direction = Direction.LEFT
+                elif event.key == pygame.K_RIGHT:
+                    game.direction = Direction.RIGHT
+
+        if key_pressed:
+            # Convert direction to action: [straight, right, left] is unused, just call play_step
+            reward, game_over, score = game.play_step(action)
+            if game_over:
+                print(f"Game Over! Final Score: {score}")
+                game.reset()
+
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
